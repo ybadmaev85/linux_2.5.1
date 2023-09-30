@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 
 class Сourse(models.Model):
     title = models.CharField(max_length=250, verbose_name='название')
@@ -26,3 +28,4 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'урок'
         verbose_name_plural = 'уроки'
+

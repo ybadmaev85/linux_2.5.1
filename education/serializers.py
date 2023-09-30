@@ -3,15 +3,39 @@ from rest_framework import serializers
 from education.models import Сourse, Lesson
 
 
+class LessonAllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = (
+            'pk',
+            'title',
+        )
+
+
 class СourseSerializer(serializers.ModelSerializer):
+    lesson_count = serializers.SerializerMethodField()
+    lessons = LessonAllSerializer(source='lesson_set', many=True)
 
     class Meta:
         model = Сourse
-        fields = '__all__'
+        fields = (
+            'pk',
+            'title',
+            'description',
+            'lesson_count',
+            'lessons'
+        )
+
+    def get_lesson_count(self, instance):
+        return instance.lesson_set.count()
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    lesson_count = serializers.SerializerMethodField()
+
+    def get_lesson_count(self, obj):
+        return obj.lesson.count()
 
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = ('title', 'image', 'description', 'url', 'lesson_count',)
