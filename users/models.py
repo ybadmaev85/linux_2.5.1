@@ -3,7 +3,14 @@ from django.db import models
 NULLABLE = {'blank': True, 'null': True}
 
 
+class UserRole(models.TextChoices):
+    MODERATOR = 'moderator'
+    MEMBER = 'member'
+
+
 class User(AbstractUser):
+    role = models.CharField(max_length=250, choices=UserRole.choices, default=UserRole.MEMBER)
+
     username = None
     email = models.EmailField(unique=True, verbose_name='email')
     avatar = models.ImageField(upload_to='users/', verbose_name='аватар', **NULLABLE)
