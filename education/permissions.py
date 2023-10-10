@@ -5,15 +5,21 @@ from users.models import UserRole
 
 class IsModerator(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == UserRole.MODERATOR and request.method in ('GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH')
+        if request.user.role == UserRole.MODERATOR:
+            return True
+        return False
 
 
 class IsMember(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == UserRole.MEMBER
+        if request.user.role == UserRole.MEMBER:
+            return True
+        return False
 
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user == obj.user
+        if request.user == obj.owner:
+            return True
+        return False
 
