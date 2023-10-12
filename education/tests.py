@@ -1,3 +1,15 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
 
-# Create your tests here.
+
+class EducationTestCase(APITestCase):
+
+    def setUp(self) -> None:
+        pass
+
+    def test_create_lesson(self):
+        """
+        Тестирование создания урока
+        """
+        self.client.get(
+
+        )
