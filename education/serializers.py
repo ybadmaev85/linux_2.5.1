@@ -27,7 +27,7 @@ class СourseSerializer(serializers.ModelSerializer):
             'lesson_count',
             'lessons'
         )
-        UrlValidator = [UrlValidator(field='description')]
+        validators = [UrlValidator(field='description')]
 
     def get_lesson_count(self, instance):
         return instance.lesson_set.count()
@@ -37,8 +37,8 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('title', 'image', 'description', 'url',)
-        UrlValidator = [UrlValidator(field='url')]
+        fields = ('title', 'image', 'description', 'url', 'user', 'course')
+        validators = [UrlValidator(field='url')]
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
