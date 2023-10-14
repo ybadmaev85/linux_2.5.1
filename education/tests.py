@@ -1,8 +1,8 @@
+from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from education.models import Сourse, Lesson
-from education.serializers import LessonSerializer
 
 
 class EducationTestCase(APITestCase):
@@ -129,3 +129,25 @@ class EducationTestCase2(APITestCase):
         self.assertFalse(
             Lesson.objects.all().exists(),
         )
+
+
+class CreateSubscription(APITestCase):
+
+    def create_user(self):
+        self.user = User.objects.create(
+            email='test@test.com',
+            is_staff=False,
+            is_active=True,
+        )
+        self.user.set_password('12345678')
+        self.user.save()
+
+    def setUp(self) -> None:
+        self.create_user()
+        self.data = {'user': self.user, 'is_active': True}
+
+    def test_create_subscription(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(reverse('education-subscriptions'), self.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+

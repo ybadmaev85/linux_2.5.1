@@ -1,6 +1,10 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 NULLABLE = {'blank': True, 'null': True}
+
+
+class UserManager(BaseUserManager):
+    pass
 
 
 class UserRole(models.TextChoices):
@@ -19,3 +23,5 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    objects = UserManager()
