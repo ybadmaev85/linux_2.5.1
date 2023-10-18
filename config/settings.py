@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,11 +44,14 @@ INSTALLED_APPS = [
     'payment',
     'django_filters',
     'rest_framework_simplejwt',
+    'drf_yasg',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -142,3 +145,21 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+STRIPE_SECRET_KEY = 'sk_test_51O2bXEEDa6FhFc7OgEeaCotC7RshZt2K3O4a6RMltzZInTkxjfvnQHkTct3gQeVJL5bVLcv1NypEJoNWNjHDUpNt00Sozfy2H7'
+
+STRIPE_PUBLIC_KEY = 'pk_test_51O2bXEEDa6FhFc7OCz3qemNb2nLcokBMklZgwEuUt3c89MJk4bJS0RzdQofa9PzWLXDkRyv520kJuFOumcRj55Js00v4nKvJH6'

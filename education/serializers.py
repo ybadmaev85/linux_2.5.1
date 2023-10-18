@@ -40,6 +40,9 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = ('title', 'image', 'description', 'url', 'user', 'course')
         validators = [UrlValidator(field='url')]
 
+        extra_kwargs = {
+            'user': {'required': False}
+        }
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     '''
@@ -53,3 +56,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             'course',
             'is_active',
         )
+
+        extra_kwargs = {
+            'user': {'required': False}
+        }

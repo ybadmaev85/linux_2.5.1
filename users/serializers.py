@@ -11,8 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'user',
+            'username',
             'avatar',
             'phone_num',
             'country',
         )
+
+        # extra_kwargs = {
+        #     'user': {'required': False}
+        # }

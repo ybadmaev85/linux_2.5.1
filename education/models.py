@@ -8,6 +8,8 @@ class Сourse(models.Model):
     title = models.CharField(max_length=250, verbose_name='название')
     image = models.ImageField(upload_to='courses/', verbose_name='картинка', **NULLABLE)
     description = models.TextField(max_length=450, verbose_name='описание', **NULLABLE)
+    price = models.PositiveIntegerField(default=0, verbose_name='стоимость')
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return f'{self.title}'
