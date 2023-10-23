@@ -5,7 +5,7 @@ from education.models import Сourse, Lesson, Subscription
 from education.paginators import EducationPaginator
 from education.permissions import IsModerator, IsMember, IsOwner
 from education.serializers import СourseSerializer, LessonSerializer, SubscriptionSerializer
-
+from tasks import subscription_mailing
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = СourseSerializer
@@ -19,16 +19,20 @@ class CourseViewSet(viewsets.ModelViewSet):
         new_instance.user = self.request.user
         new_instance.save()
 
+    def update(self, request, *args, **kwargs):
+        course = self.get_object()
+        subscription_mailing.delay(course.id, 'Course')
+        return super().update(request, *args, **kwargs)
+
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
     # permission_classes = [IsAuthenticated, IsMember]
     permission_classes = [AllowAny]
 
-    # def perform_create(self, serializer):
-    #     new_instance = serializer.save()
-    #     new_instance.user = self.request.user
-    #     new_instance.save()
+    def perform_create(self, serializer):
+        lesson = serializer.save(owner=self.request.user)
+        subscription_mailing.delay(lesson.id, 'Lesson')
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -52,6 +56,10 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     permission_classes = [AllowAny]
     # permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
+    def update(self, request, *args, **kwargs):
+        lesson = self.get_object()
+        subscription_mailing.delay(lesson.id, 'Lesson')
+        return super().update(request, *args, **kwargs)
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
