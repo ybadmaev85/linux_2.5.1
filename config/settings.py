@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.SetLastVisitMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -168,3 +169,16 @@ CSRF_TRUSTED_ORIGINS = [
 STRIPE_SECRET_KEY = 'sk_test_51O2bXEEDa6FhFc7OgEeaCotC7RshZt2K3O4a6RMltzZInTkxjfvnQHkTct3gQeVJL5bVLcv1NypEJoNWNjHDUpNt00Sozfy2H7'
 
 STRIPE_PUBLIC_KEY = 'pk_test_51O2bXEEDa6FhFc7OCz3qemNb2nLcokBMklZgwEuUt3c89MJk4bJS0RzdQofa9PzWLXDkRyv520kJuFOumcRj55Js00v4nKvJH6'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULE = {
+     'user_ban': {
+         'task': 'user_ban',
+         'schedule': timedelta(minutes=1)
+     },
+ }
