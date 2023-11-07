@@ -5,7 +5,8 @@ from education.models import Сourse, Lesson, Subscription
 from education.paginators import EducationPaginator
 from education.permissions import IsModerator, IsMember, IsOwner
 from education.serializers import СourseSerializer, LessonSerializer, SubscriptionSerializer
-from tasks import subscription_mailing
+from .tasks import subscription_mailing
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = СourseSerializer
@@ -60,6 +61,7 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
         lesson = self.get_object()
         subscription_mailing.delay(lesson.id, 'Lesson')
         return super().update(request, *args, **kwargs)
+
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
